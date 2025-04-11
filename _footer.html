@@ -1,0 +1,102 @@
+{% assign footer_edit_url = site.admin_dashboard_url | append:"/sites/"  | append:site.id | append:"/footer" %}
+{% include "partial_assign_data_edit_attribute" edit_url: footer_edit_url %}
+
+<footer class="bg-dark m-0" {{ data_edit_attribute }}>
+  <div class="container pt-5 pb-3">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-12 pt-1 pb-3 text-center text-md-left">
+            <a class="navbar-brand mr-0" href="/" title="Home">
+              {% if light_logo.size > 0 %}
+                {{ light_logo }}
+              {% elsif site.has_meta_image? %}
+                <img src="{{ site.meta_image_url }}" alt="{{ site.name }}" />
+              {% else %}
+                <h4 class="text-white" style="white-space: normal;">{{ site.name }}</h4>
+              {% endif %}
+            </a>
+          </div>
+        </div>
+        <div class="row pb-3">
+          <div class="col-md-12 text-center text-md-left">
+            <div class="social-row">
+              {% if site.has_twitter? %}
+                <a href="{{ site.broadcaster.twitter_profile_url }}" target="_blank" class="twitter-share-link">
+                  <span class="fa fa-twitter"></span>
+                </a>
+              {% endif %}
+
+              {% if site.has_facebook_page? %}
+                <a href="{{ site.broadcaster.facebook_page_profile_url }}" target="_blank" class="facebook-share-link ml-2">
+                  <span class="fa fa-facebook"></span>
+                </a>
+              {% endif %}
+
+              {% if site.button1_text contains 'youtube' or site.button1_text contains 'facebook' or site.button1_text contains 'telegram' or site.button1_text contains 'twitter' or site.button1_text contains 'instagram' or site.button1_text contains 'google' %}
+                <a href="{{ site.button1_text }}" target="_blank" class="ml-2">
+                  <span class="fa {% if site.button1_text contains 'youtube' %}fa-youtube{% elsif site.button1_text contains 'facebook' %}fa-facebook{% elsif site.button1_text contains 'telegram' %}fa-telegram{% elsif site.button1_text contains 'twitter' %}fa-twitter{% elsif site.button1_text contains 'instagram' %}fa-instagram{% elsif site.button1_text contains 'google' %}fa-google-plus{% endif %}"></span>
+                </a>
+              {% endif %}
+
+              {% if site.button2_text contains 'youtube' or site.button2_text contains 'facebook' or site.button2_text contains 'telegram' or site.button2_text contains 'twitter' or site.button2_text contains 'instagram' or site.button2_text contains 'google' %}
+                <a href="{{ site.button2_text }}" target="_blank" class="ml-2">
+                  <span class="fa {% if site.button2_text contains 'youtube' %}fa-youtube{% elsif site.button2_text contains 'facebook' %}fa-facebook{% elsif site.button2_text contains 'telegram' %}fa-telegram{% elsif site.button2_text contains 'twitter' %}fa-twitter{% elsif site.button2_text contains 'instagram' %}fa-instagram{% elsif site.button2_text contains 'google' %}fa-google-plus{% endif %}"></span>
+                </a>
+              {% endif %}
+
+              {% if site.button3_text contains 'youtube' or site.button3_text contains 'facebook' or site.button3_text contains 'telegram' or site.button3_text contains 'twitter' or site.button3_text contains 'instagram' or site.button3_text contains 'google' %}
+                <a href="{{ site.button3_text }}" target="_blank" class="ml-2">
+                  <span class="fa {% if site.button3_text contains 'youtube' %}fa-youtube{% elsif site.button3_text contains 'facebook' %}fa-facebook{% elsif site.button3_text contains 'telegram' %}fa-telegram{% elsif site.button3_text contains 'twitter' %}fa-twitter{% elsif site.button3_text contains 'instagram' %}fa-instagram{% elsif site.button3_text contains 'google' %}fa-google-plus{% endif %}"></span>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-9">
+        <div class="row">
+
+          {% for child in site.root_nav_pages | limit:4 %}
+          <div class="col-6 col-sm pt-3 pt-sm-1">
+            <ul class="navbar-nav text-left">
+              <li class="text-white mt-0">
+                {% if child.type_slug == "redirect" %}
+                  <strong>{{ child.name | upcase }}</strong>
+                {% else %}
+                  <a class="text-white font-weight-bold small" href="{{ child.url }}">{{ child.name | upcase }}</a>
+                {% endif %}
+              </li>
+              {% assign grandchild_count = 0 %}
+              {% for child2 in child.nav_children %}
+                {% assign grandchild_count = grandchild_count | plus:1 %}
+                {% if grandchild_count == 6 %}
+                  {% break %}
+                {% endif %}
+                <li><a class="font-weight-light text-white small" href="{{ child2.url }}">- {{ child2.name | upcase }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+    <div class="row pt-5">
+      <div class="col text-center">
+        <div class="pb-3 text-white font-weight-light small">
+          {% if site.footer_content.size > 0 %}
+            {{ site.footer_content }}
+          {% endif %}
+          <div class="font-weight-light pb-3">
+            <a href="https://themes.nationbuilder.com/candidate" target="_blank">
+              {% include "partial_logo" %}
+            </a>
+            {{ text_theme_by }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
