@@ -150,7 +150,7 @@
                 {% if page_tags_list contains "#admin_cover_fee#" %}
                   <div class="custom-control custom-checkbox text-center mt-4">
                     <input class="custom-control-input checkbox" id="donation_donor_covers_fees" type="checkbox">
-                    <label for="donation_donor_covers_fees" class="custom-control-label checkbox">I’ll cover the processing fee - add it to my donation.</label>
+                    <label for="donation_donor_covers_fees" class="custom-control-label checkbox">I'll cover the processing fee - add it to my donation.</label>
                   </div>
                   {% if page.donation_v2.amount_in_cents != 0 %}
                     {% hidden_field_tag "donation[amount]", page.donation_v2.confirmation_amount %}
@@ -202,7 +202,7 @@
                     <div id="donation-v2-payment-request"></div>
                   {% endif %}
                   <div id="cc-request-button">
-                    <button type="button" class="btn btn-primary btn-lg"><i id="credit-card-icon"></i>Credit Card</button>
+                    <button type="button" class="btn btn-primary btn-lg"><i id="credit-card-icon"></i>Carte bancaire</button>
                   </div>
                 </div>
 
@@ -222,7 +222,7 @@
                 <div id="cc-info" class="row">
                   <div class="col-sm-12">
                     <div class="form-group">
-                      <label>Credit Card</label>
+                      <label>Carte bancaire</label>
                       {% payment_field 'card' %}
                     </div>
                     <p class="padtop text-center">
@@ -293,7 +293,9 @@
                         <div id="address-info">
                           <div class="form-group">
                             <label for="donation_billing_address_country_code" class="sr-only">{{ text_country }}</label>
-                            {% collection_select "billing_address.country_code", page.donation_v2.countries, "code", "name", class:"select form-control" %}
+                            <select name="donation[billing_address][country_code]" class="select form-control" disabled>
+                              <option value="FR" selected>France</option>
+                            </select>
                           </div>
                           <div class="form-group">
                             <label class="sr-only" for="donation_billing_address_address1">{{ text_address_1 }}</label>
@@ -458,12 +460,14 @@
                         </div>
                       {% endif %}
 
+                      {%comment%}
                       {% if site.ask_to_publish_to_stream? %}
                         <div class="custom-control custom-checkbox">
                           {% check_box "is_private", class:"custom-control-input" %}
                           <label for="donation_is_private" class="custom-control-label"> {{ text_dont_publish_donation }}</label>
                         </div>
                       {% endif %}
+                      {%endcomment%}
                     </div>
 
                     {% if page.show_consent_form? %}
@@ -499,9 +503,9 @@
 
                         <div class="mt-4 membership-submit-button">
                           {% if request.current_order %}
-                           {% submit_tag text_process_payment, class:"btn btn-primary" %}
+                           {% submit_tag text_process_payment, class:"btn btn-primary", id:"donate-button" %}
                           {% else %}
-                           {% submit_tag text_donate_now, class:"btn btn-primary" %}
+                           {% submit_tag text_donate_now, class:"btn btn-primary", id:"donate-button" %}
                           {% endif %}
                         </div>
                       </div>
@@ -561,7 +565,9 @@
                 <div class="col">
                   <div class="form-group">
                     <label class="sr-only" for="donation_billing_address_country_code">{{ text_country }}</label>
-                    {% collection_select "billing_address.country_code", page.donation_v2.countries, "code", "name", class:"select form-control" %}
+                    <select name="donation[billing_address][country_code]" class="select form-control" disabled>
+                      <option value="FR" selected>France</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -972,5 +978,40 @@
     if (btn) {
       btn.value = "Payez maintenant";
     }
+    
+    
+    
+      // Get the confirmation checkbox and submit button with more specific selectors
+    const confirmCheckbox = document.querySelector('input[type="checkbox"][name="donation[is_confirmed]"]');
+    const donateButton = document.querySelector('.membership-submit-button input[type="submit"]');
+
+    if (confirmCheckbox && donateButton) {
+      // Create warning message element
+      const warningMessage = document.createElement('div');
+      warningMessage.className = 'alert alert-warning text-center mb-3';
+      warningMessage.style.display = 'none';
+      warningMessage.textContent = 'Veuillez confirmer que vos déclarations sont vraies et exactes';
+      
+      // Insert warning message before the button
+      donateButton.parentNode.insertBefore(warningMessage, donateButton);
+
+      // Add click event listener to the button
+      donateButton.addEventListener('click', function(e) {
+        if (!confirmCheckbox.checked) {
+          e.preventDefault(); // Prevent form submission
+          warningMessage.style.display = 'block';
+        } else {
+          warningMessage.style.display = 'none';
+        }
+      });
+
+      // Hide warning message when checkbox is checked
+      confirmCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          warningMessage.style.display = 'none';
+        }
+      });
+    }
+    
   });
 </script>
