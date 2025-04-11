@@ -1,7 +1,7 @@
 {% assign footer_edit_url = site.admin_dashboard_url | append:"/sites/"  | append:site.id | append:"/footer" %}
 {% include "partial_assign_data_edit_attribute" edit_url: footer_edit_url %}
 
-<footer class="bg-dark m-0" {{ data_edit_attribute }}>
+<footer class="bg-dark custom-footer m-0" {{ data_edit_attribute }}>
   <div class="container pt-5 pb-3">
     <div class="row">
       <div class="col-md-3">
@@ -79,24 +79,35 @@
             </ul>
           </div>
           {% endfor %}
-
+         
         </div>
+<div class="row justify-content-center justify-content-md-start text-center text-md-start">
+  <div class="col-12 col-md-auto">
+    <h2 class="text-white pt-5">Notre Nation</h2>
+  </div>
+</div>
+        
       </div>
     </div>
+    
+              {%comment%}
     <div class="row pt-5">
       <div class="col text-center">
         <div class="pb-3 text-white font-weight-light small">
           {% if site.footer_content.size > 0 %}
             {{ site.footer_content }}
           {% endif %}
+          
           <div class="font-weight-light pb-3">
             <a href="https://themes.nationbuilder.com/candidate" target="_blank">
               {% include "partial_logo" %}
             </a>
             {{ text_theme_by }}
           </div>
+
         </div>
       </div>
     </div>
+{%endcomment%}
   </div>
 </footer>
