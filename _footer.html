@@ -69,7 +69,8 @@
                 {% endif %}
               </li>
               {% assign grandchild_count = 0 %}
-              {% for child2 in child.nav_children %}
+              {% assign sorted_children = child.children | sort: 'created_at' %}
+              {% for child2 in sorted_children %}
                 {% assign grandchild_count = grandchild_count | plus:1 %}
                 {% if grandchild_count == 6 %}
                   {% break %}
@@ -80,13 +81,7 @@
           </div>
           {% endfor %}
          
-        </div>
-<div class="row justify-content-center justify-content-md-start text-center text-md-start">
-  <div class="col-12 col-md-auto">
-    <h2 class="text-white pt-5">Notre Nation</h2>
-  </div>
-</div>
-        
+        </div>        
       </div>
     </div>
     
